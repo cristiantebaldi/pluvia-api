@@ -1,0 +1,9 @@
+card {
+    display: flex;
+    align-items: center;
+}
+
+* {
+
+    background: linear-gradient(#5089B8, #182B55);
+}
