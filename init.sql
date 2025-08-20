@@ -6,7 +6,7 @@ CREATE TABLE usuarios (
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     habilitado INT DEFAULT 0
-)
+);
 
 CREATE TABLE administradores (
     id SERIAL PRIMARY KEY,
@@ -17,13 +17,13 @@ CREATE TABLE administradores (
     acesso INT DEFAULT 0,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-)
+);
 
 CREATE TABLE dispositivos (
     id SERIAL PRIMARY KEY,
     endereco_ip VARCHAR(50),
     endereco_mac VARCHAR(50)
-)
+);
 
 CREATE TABLE dispositivos_administradores (
     id SERIAL PRIMARY KEY,
@@ -40,14 +40,14 @@ CREATE TABLE dispositivos_administradores (
         REFERENCES dispositivos (id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
-)
+);
 
 CREATE TABLE codigos (
     id SERIAL PRIMARY KEY,
     destinatario VARCHAR(100),
     codigo VARCHAR(100),
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-)
+);
 
 CREATE TABLE notificacoes (
     id SERIAL PRIMARY KEY,
@@ -59,7 +59,7 @@ CREATE TABLE notificacoes (
         REFERENCES dispositivos_administradores (id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
-)
+);
 
 CREATE OR REPLACE FUNCTION atualizar_timestamp()
 RETURNS TRIGGER AS $$
