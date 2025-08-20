@@ -1,0 +1,20 @@
+FROM golang:1.25.0
+
+WORKDIR /api
+
+RUN go install github.com/swaggo/swag/cmd/swag@v1.8.7
+
+ENV AIR_VERSION=v1.51.0
+RUN curl -L https://github.com/cosmtrek/air/releases/download/${AIR_VERSION}/air_${AIR_VERSION#v}_linux_amd64.tar.gz \
+    -o air.tar.gz \
+    && tar -xzf air.tar.gz -C /usr/local/bin \
+    && rm air.tar.gz
+
+ENV DOCKERIZE_VERSION=v0.6.1
+RUN wget https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+    && rm dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz
+
+ENTRYPOINT ["dockerize", "-wait", "tcp://postgres:5432", "-timeout", "20s"]
+
+CMD ["/bin/sh", "-c", "/scripts/change_vars_config.sh /api && air"]

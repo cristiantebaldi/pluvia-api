@@ -16,7 +16,7 @@ type Auth struct {
 
 type AuthRepository interface {
 	GetByRefreshTypeToken(string, string) (*Auth, error)
-	GetByAccountID(int32) (*Auth, error)
+	GetByAdminID(int32) (*Auth, error)
 	Create(Auth) error
 	Delete(int32) error
 	Update(int32, Auth) error

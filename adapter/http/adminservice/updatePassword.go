@@ -1,7 +1,9 @@
 package adminservice
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pluvia/pluvia-api/adapter/http/middleware"
@@ -9,18 +11,29 @@ import (
 	"github.com/pluvia/pluvia-api/util"
 )
 
-// Create goDoc
-// @Summary Create admin
-// @Description Create admin
+// UpdatePassword goDoc
+// @Summary UpdatePassword admin
+// @Description UpdatePassword admin by id
 // @Tags admin
 // @Accept  json
 // @Produce  json
 // @Param admin body dto.AdminRequestBody true "admin"
+// @Param id path int true "1"
 // @Success 200 {object} domain.Admin
 // @Security ApiKeyAuth
-// @Router /admin [post]
-func (service service) Create(c *gin.Context) {
-	adminRequest, err := dto.FromJsonToAdminRequestBody(c.Request.Body, service.validator)
+// @Router /admin-pass/{id} [put]
+func (service service) UpdatePassword(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(
+			http.StatusInternalServerError,
+			middleware.ResponseMessage(fmt.Errorf("param route id is required and must be valid number")),
+		)
+		return
+	}
+
+	accountRequest, err := dto.FromJsonToAdminRequestBody(c.Request.Body, service.validator)
 
 	if err != nil {
 		if _, ok := err.(util.RequestError); ok {
@@ -32,12 +45,12 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	admin, err := service.usecase.Create(adminRequest)
+	account, err := service.usecase.UpdatePassword(int32(id), accountRequest)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, admin)
+	c.JSON(http.StatusOK, account)
 }

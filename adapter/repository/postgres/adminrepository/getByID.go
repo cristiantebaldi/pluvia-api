@@ -18,7 +18,7 @@ func (repository repository) GetByID(id int32) (*domain.Admin, error) {
 	)
 
 	if err == sql.ErrNoRows {
-		return nil, fmt.Errorf("account not exists")
+		return nil, fmt.Errorf("admin not exists")
 	}
 
 	if err != nil {

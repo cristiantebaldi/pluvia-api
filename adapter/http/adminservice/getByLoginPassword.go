@@ -9,18 +9,8 @@ import (
 	"github.com/pluvia/pluvia-api/util"
 )
 
-// Create goDoc
-// @Summary Create admin
-// @Description Create admin
-// @Tags admin
-// @Accept  json
-// @Produce  json
-// @Param admin body dto.AdminRequestBody true "admin"
-// @Success 200 {object} domain.Admin
-// @Security ApiKeyAuth
-// @Router /admin [post]
-func (service service) Create(c *gin.Context) {
-	adminRequest, err := dto.FromJsonToAdminRequestBody(c.Request.Body, service.validator)
+func (service service) GetByLoginPassword(c *gin.Context) {
+	loginRequest, err := dto.FromJsonToAdminLoginRequestBody(c.Request.Body, service.validator)
 
 	if err != nil {
 		if _, ok := err.(util.RequestError); ok {
@@ -32,12 +22,12 @@ func (service service) Create(c *gin.Context) {
 		return
 	}
 
-	admin, err := service.usecase.Create(adminRequest)
+	jwtTokenAuth, err := service.usecase.GetByLoginPassword(loginRequest)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, admin)
+	c.JSON(http.StatusOK, jwtTokenAuth)
 }

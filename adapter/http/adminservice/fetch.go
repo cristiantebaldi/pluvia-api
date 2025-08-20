@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pluvia/pluvia-api/adapter/http/middleware"
 )
 
 // Fetch goDoc
@@ -28,8 +29,8 @@ func (service service) Fetch(c *gin.Context) {
 	// 	return
 	// }
 
-	//admin := middleware.GetContextData(c.Request)
-	admins, err := service.usecase.Fetch()
+	admin := middleware.GetContextData(c.Request)
+	admins, err := service.usecase.Fetch(admin)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)

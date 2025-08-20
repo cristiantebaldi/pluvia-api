@@ -23,7 +23,7 @@ Fornecer uma API robusta e escalável para dar suporte à aplicação Pluvia, ga
 
 - **Linguagem:** [Go (Golang)](https://golang.org/)
 - **Banco de Dados:** [PostgreSQL](https://www.postgresql.org/)
-- **Roteador HTTP:** (ex: `net/http`, `Gin`, `Echo` - a ser definido)
+- **Roteador HTTP:** `Gin`
 
 ## 🚀 Como Executar o Projeto
 
@@ -56,7 +56,7 @@ Fornecer uma API robusta e escalável para dar suporte à aplicação Pluvia, ga
 
 1.  Inicie o servidor:
     ```sh
-    go run main.go
+    docker-compose up
     ```
 2.  O servidor estará disponível em `http://localhost:3000`.
 

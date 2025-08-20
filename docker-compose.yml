@@ -1,0 +1,53 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+      - 9001:9001
+    depends_on: 
+      - postgres
+    volumes:
+      - ./:/api
+      - ./scripts:/scripts
+    networks:
+      - backend-pluvia
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: pluvia
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-pluvia:/var/lib/postgresql/data
+      # - ./database/postgres/scripts/db:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    networks:
+      - backend-pluvia
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-pluvia:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - backend-pluvia
+
+networks: 
+  backend-pluvia:
+    driver: bridge
+
+volumes:
+  pgadmin-pluvia:
+  postgres-pluvia:

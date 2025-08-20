@@ -17,9 +17,9 @@ type AdminLoginRequestBody struct {
 type AdminRequestBody struct {
 	Name        string    `json:"name" validate:"required,gte=5,lte=150"`
 	Email       string    `json:"email" validate:"required,email"`
-	Password    string    `json:"passoword"`
+	Password    string    `json:"password"`
 	Phone       string    `json:"phone" validate:"required,e164"`
-	Enable      int       `json:"enable" validate:"required:gte=0"`
+	Enable      bool      `json:"enable" validate:"required"`
 	CreatedDate time.Time `json:"createdDate"`
 	UpdatedDate time.Time `json:"updatedDate"`
 }

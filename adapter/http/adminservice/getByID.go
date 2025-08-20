@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pluvia/pluvia-api/adapter/http/middleware"
 )
 
 // GetByID goDoc
@@ -29,7 +30,7 @@ func (service service) GetByID(c *gin.Context) {
 		return
 	}
 
-	admin, err := service.usecase.(int32(id))
+	admin, err := service.usecase.GetByID(int32(id))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)

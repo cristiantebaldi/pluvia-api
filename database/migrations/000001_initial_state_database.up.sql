@@ -1,3 +1,32 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE EXTENSION IF NOT EXISTS unaccent;
+
+CREATE TABLE admin (
+	id serial primary key not null,
+	name varchar(60) not null,
+	email varchar(100) not null,
+	phone varchar(50) not null,
+	enable boolean default false,
+	password varchar(300),
+	created_date timestamp default current_timestamp,
+	updated_date timestamp default current_timestamp
+);
+
+CREATE TABLE auth (
+	id serial primary key not null,
+	type varchar(60) not null,
+	hash varchar(600) not null,
+	token varchar(600) not null,
+	admin_id integer not null,
+	revoked boolean default false,
+	created_date timestamp default current_timestamp,
+
+	CONSTRAINT admin_id_fk
+	FOREIGN KEY (admin_id) REFERENCES admin (id)
+);
+
+
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     numero_telefone VARCHAR(25) NOT NULL,

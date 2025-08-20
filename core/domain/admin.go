@@ -13,9 +13,9 @@ type Admin struct {
 	Email       string    `json:"email"  db:"email"`
 	Password    string    `json:"-"  db:"password"`
 	Phone       string    `json:"phone" db:"phone"`
-	Enable      int       `json:"enable" db:"enable"`
+	Enable      bool       `json:"enable" db:"enable"`
 	CreatedDate time.Time `json:"createdDate" db:"created_date"`
-	UpdatedDate time.Time `json:"updatedDate" db:"update_date"`
+	UpdatedDate time.Time `json:"updatedDate" db:"updated_date"`
 }
 
 type AdminHTTPService interface {
@@ -24,15 +24,20 @@ type AdminHTTPService interface {
 	Fetch(*gin.Context)
 	GetByID(*gin.Context)
 	Delete(*gin.Context)
+	UpdatePassword(*gin.Context)
+
+	GetByLoginPassword(*gin.Context)
+	RefreshToken(*gin.Context)
 }
 
 type AdminUseCase interface {
 	Create(*dto.AdminRequestBody) (*Admin, error)
 	Update(int32, *dto.AdminRequestBody) (*Admin, error)
 	UpdatePassword(int32, *dto.AdminRequestBody) (*Admin, error)
+	GetByID(int32) (*Admin, error)
 	Delete(int32) (*Admin, error)
 	GetByLoginPassword(*dto.AdminLoginRequestBody) (*JwtAuthToken, error)
-	Fetch() (*[]Admin, error)
+	Fetch(Admin) (*[]Admin, error)
 	RefreshToken(string, string) (*JwtAuthToken, error)
 }
 

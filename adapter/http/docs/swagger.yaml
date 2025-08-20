@@ -1,0 +1,196 @@
+definitions:
+  domain.Admin:
+    properties:
+      createdDate:
+        type: string
+      email:
+        type: string
+      enable:
+        type: boolean
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      updatedDate:
+        type: string
+    type: object
+  dto.AdminRequestBody:
+    properties:
+      createdDate:
+        type: string
+      email:
+        type: string
+      enable:
+        type: boolean
+      name:
+        maxLength: 150
+        minLength: 5
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      updatedDate:
+        type: string
+    required:
+    - email
+    - enable
+    - name
+    - phone
+    type: object
+host: pluvia.api.com.br
+info:
+  contact: {}
+  title: Pluvia API Docs
+  version: 2025.8.4.0
+paths:
+  /admin:
+    get:
+      consumes:
+      - application/json
+      description: Fetch admins
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuth: []
+      summary: Fetch admins
+      tags:
+      - admin
+    post:
+      consumes:
+      - application/json
+      description: Create admin
+      parameters:
+      - description: admin
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminRequestBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuth: []
+      summary: Create admin
+      tags:
+      - admin
+  /admin-pass/{id}:
+    put:
+      consumes:
+      - application/json
+      description: UpdatePassword admin by id
+      parameters:
+      - description: admin
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminRequestBody'
+      - description: "1"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuth: []
+      summary: UpdatePassword admin
+      tags:
+      - admin
+  /admin/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete admin by id
+      parameters:
+      - description: "1"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete admin
+      tags:
+      - admin
+    get:
+      consumes:
+      - application/json
+      description: Get admin by id
+      parameters:
+      - description: "1"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuths: []
+      summary: Get admin
+      tags:
+      - admin
+    put:
+      consumes:
+      - application/json
+      description: Update admin by id
+      parameters:
+      - description: admin
+        in: body
+        name: admin
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminRequestBody'
+      - description: "1"
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Admin'
+      security:
+      - ApiKeyAuth: []
+      summary: Update admin
+      tags:
+      - admin
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
