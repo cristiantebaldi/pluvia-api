@@ -60,7 +60,7 @@ func RegisterConstraint(c *Constraint) {
 	constraintMu.Lock()
 	defer constraintMu.Unlock()
 	if _, dup := constraintMap[c.Name]; dup {
-		panic("dberror: RegisterConstraint called twice for name " + c.Name)
+		panic("dberror: RegisterConstraint called twice for usuario " + c.Name)
 	}
 	constraintMap[c.Name] = c
 }
@@ -78,7 +78,8 @@ var valueFinder = regexp.MustCompile(`Key \(.+\)=\((.+)\)`)
 // column does not exist, the empty string is returned.
 //
 // detail can look like this:
-//    Key (id)=(3c7d2b4a-3fc8-4782-a518-4ce9efef51e7) already exists.
+//
+//	Key (id)=(3c7d2b4a-3fc8-4782-a518-4ce9efef51e7) already exists.
 func findColumn(detail string) string {
 	results := columnFinder.FindStringSubmatch(detail)
 	if len(results) < 2 {
@@ -92,7 +93,8 @@ func findColumn(detail string) string {
 // column does not exist, the empty string is returned.
 //
 // detail can look like this:
-//    Key (id)=(3c7d2b4a-3fc8-4782-a518-4ce9efef51e7) already exists.
+//
+//	Key (id)=(3c7d2b4a-3fc8-4782-a518-4ce9efef51e7) already exists.
 func findValue(detail string) string {
 	results := valueFinder.FindStringSubmatch(detail)
 	if len(results) < 2 {
@@ -108,7 +110,8 @@ var foreignKeyFinder = regexp.MustCompile(`not present in table "(.+)"`)
 // string. If we can't find the table, we return the empty string.
 //
 // detail can look like this:
-//    Key (account_id)=(91f47e99-d616-4d8c-9c02-cbd13bceac60) is not present in table "accounts"
+//
+//	Key (account_id)=(91f47e99-d616-4d8c-9c02-cbd13bceac60) is not present in table "accounts"
 func findForeignKeyTable(detail string) string {
 	results := foreignKeyFinder.FindStringSubmatch(detail)
 	if len(results) < 2 {
@@ -128,9 +131,9 @@ func findParentTable(message string) string {
 }
 
 func FilterColumns(columns *string, defaultColumns string, table string) string {
-    if columns == nil {
-        return defaultColumns
-    }
+	if columns == nil {
+		return defaultColumns
+	}
 
 	var builder strings.Builder
 	for i, col := range strings.Split(*columns, ",") {
@@ -141,7 +144,7 @@ func FilterColumns(columns *string, defaultColumns string, table string) string 
 		builder.WriteString(table + "." + col)
 	}
 
-    return builder.String()
+	return builder.String()
 }
 
 func GetError(err error) error {

@@ -1,4 +1,4 @@
-package authrepository
+package administradorrepository
 
 import (
 	"database/sql"
@@ -8,13 +8,12 @@ import (
 	"github.com/pluvia/pluvia-api/util"
 )
 
-// GetByID implements domain.AuthRepository.
-func (repository repository) GetByID(id int32) (*domain.Auth, error) {
-	auth := domain.Auth{}
+func (repository repository) GetByID(id int32) (*domain.Administrador, error) {
+	administrador := domain.Administrador{}
 
 	err := repository.db.Get(
-		&auth,
-		`SELECT * FROM auth where id = $1;`,
+		&administrador,
+		`SELECT * FROM administrador where id = $1;`,
 		id,
 	)
 
@@ -26,5 +25,5 @@ func (repository repository) GetByID(id int32) (*domain.Auth, error) {
 		return nil, util.GetError(err)
 	}
 
-	return &auth, nil
+	return &administrador, nil
 }

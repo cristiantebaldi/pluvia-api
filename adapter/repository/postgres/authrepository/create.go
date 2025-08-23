@@ -18,7 +18,7 @@ func (repository repository) Create(auth domain.Auth) error {
 		auth.Type,
 		auth.Hash,
 		auth.Token,
-		auth.AdminID,
+		auth.AdministradorID,
 		auth.Revoked,
 	)
 

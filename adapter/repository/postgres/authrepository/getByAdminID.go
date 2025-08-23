@@ -7,7 +7,7 @@ import (
 	"github.com/pluvia/pluvia-api/core/domain"
 )
 
-func (repository repository) GetByAdminID(id int32) (*domain.Auth, error) {
+func (repository repository) GetByAdministradorID(id int32) (*domain.Auth, error) {
 	auth := domain.Auth{}
 
 	err := repository.db.QueryRow(
@@ -18,7 +18,7 @@ func (repository repository) GetByAdminID(id int32) (*domain.Auth, error) {
 		&auth.Type,
 		&auth.Hash,
 		&auth.Token,
-		&auth.AdminID,
+		&auth.AdministradorID,
 		&auth.Revoked,
 		&auth.CreatedDate,
 	)

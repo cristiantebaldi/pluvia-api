@@ -11,15 +11,15 @@ type JwtAuthToken struct {
 }
 
 type JwtToken struct {
-	Admin Admin `json:"account,omitempty"`
-	Exp   int64 `json:"exp,omitempty"`
+	Administrador Administrador `json:"account,omitempty"`
+	Exp           int64         `json:"exp,omitempty"`
 	jwt.Claims
 }
 
-func NewJwtToken(admin Admin, exp int64) JwtToken {
+func NewJwtToken(administrador Administrador, exp int64) JwtToken {
 	jwtToken := JwtToken{
-		Admin: admin,
-		Exp:   exp,
+		Administrador: administrador,
+		Exp:           exp,
 	}
 
 	return jwtToken

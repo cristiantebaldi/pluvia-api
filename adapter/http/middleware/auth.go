@@ -30,10 +30,8 @@ func VerifyAuthWithoutPermissions() gin.HandlerFunc {
 	}
 }
 
-
 // VerifyAuthWithPermissions is a place function to control the session in middleware
-func VerifyAuthWithPermissions(
-) gin.HandlerFunc {
+func VerifyAuthWithPermissions() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.Request.Method != "OPTIONS" {
 			bearToken := c.Request.Header.Get(
@@ -43,12 +41,11 @@ func VerifyAuthWithPermissions(
 			if isAuth, access := verifyAccessToken(bearToken); isAuth {
 				c.Request = setContextData(c.Request, &access)
 
-				if access.Enable == true {
+				if access.Acesso == 1 {
 					c.Next()
 					return
 				}
 
-				
 				c.AbortWithStatus(http.StatusUnauthorized)
 				return
 			}
@@ -60,13 +57,13 @@ func VerifyAuthWithPermissions(
 	}
 }
 
-func verifyAccessToken(bearToken string) (bool, domain.Admin) {
-	admin := domain.Admin{}
+func verifyAccessToken(bearToken string) (bool, domain.Administrador) {
+	administrador := domain.Administrador{}
 
 	tokenBearer, err := ParseBearerToken(bearToken)
 
 	if err != nil {
-		return false, admin
+		return false, administrador
 	}
 
 	token, err := jwt.Parse(*tokenBearer, func(token *jwt.Token) (interface{}, error) {
@@ -77,14 +74,14 @@ func verifyAccessToken(bearToken string) (bool, domain.Admin) {
 	})
 
 	if err != nil {
-		return false, admin
+		return false, administrador
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		mapstructure.Decode(claims["admin"], &admin)
+		mapstructure.Decode(claims["administrador"], &administrador)
 	} else {
-		return false, admin
+		return false, administrador
 	}
 
-	return true, admin
+	return true, administrador
 }

@@ -3,18 +3,19 @@ package router
 import (
 	"net/http"
 
-	"github.com/pluvia/pluvia-api/controllers"
+	"github.com/pluvia/pluvia-api/adapter/handler"
 )
 
-func SetupRoutes() *http.ServeMux {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/", controllers.HomeHandler)
-	mux.HandleFunc("/cadastro-usuario", controllers.ContactHandler)
-
-	// Arquivos estáticos
-	mux.Handle("/static/",
-		http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-
-	return mux
+func SetupRoutes(adminHandler *handler.AdministradorHandler) *http.ServeMux {
+    mux := http.NewServeMux()
+    
+    // Páginas HTML (Server-side Rendered)
+    mux.HandleFunc("/admin/create", adminHandler.ShowCreateForm)  // GET
+    mux.HandleFunc("/admin/create", adminHandler.ProcessCreate)  // POST
+    mux.HandleFunc("/admin/list", adminHandler.ShowList)
+    
+    // Arquivos estáticos
+    mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+    
+    return mux
 }

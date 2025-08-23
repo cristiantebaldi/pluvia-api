@@ -1,0 +1,97 @@
+<!-- templates/admin/create_form.html -->
+{{define "content"}}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Cadastrar Novo Administrador</h3>
+            </div>
+            <div class="card-body">
+                {{if .Success}}
+                    <div class="alert alert-success">{{.Message}}</div>
+                    <a href="/admin/list" class="btn btn-primary">Ver Lista de Administradores</a>
+                {{else}}
+                    {{if .Errors.general}}
+                        <div class="alert alert-danger">{{.Errors.general}}</div>
+                    {{end}}
+                    
+                    <form method="POST" action="/admin/create">
+                        <div class="mb-3">
+                            <label for="usuario" class="form-label">Usuário</label>
+                            <input type="text" class="form-control {{if .Errors.usuario}}is-invalid{{end}}" 
+                                   id="usuario" name="usuario" value="{{.Administrator.Usuario}}" required>
+                            {{if .Errors.usuario}}
+                                <div class="invalid-feedback">{{.Errors.usuario}}</div>
+                            {{end}}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control {{if .Errors.email}}is-invalid{{end}}" 
+                                   id="email" name="email" value="{{.Administrator.Email}}" required>
+                            {{if .Errors.email}}
+                                <div class="invalid-feedback">{{.Errors.email}}</div>
+                            {{end}}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="senha" class="form-label">Senha</label>
+                                    <input type="password" class="form-control {{if .Errors.senha}}is-invalid{{end}}" 
+                                           id="senha" name="senha" required>
+                                    {{if .Errors.senha}}
+                                        <div class="invalid-feedback">{{.Errors.senha}}</div>
+                                    {{end}}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                                    <input type="password" class="form-control {{if .Errors.confirmarSenha}}is-invalid{{end}}" 
+                                           id="confirmar_senha" name="confirmar_senha" required>
+                                    {{if .Errors.confirmarSenha}}
+                                        <div class="invalid-feedback">{{.Errors.confirmarSenha}}</div>
+                                    {{end}}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="numero_telefone" class="form-label">Número de Telefone</label>
+                            <input type="tel" class="form-control {{if .Errors.numeroTelefone}}is-invalid{{end}}" 
+                                   id="numero_telefone" name="numero_telefone" 
+                                   value="{{.Administrator.NumeroTelefone}}" required>
+                            {{if .Errors.numeroTelefone}}
+                                <div class="invalid-feedback">{{.Errors.numeroTelefone}}</div>
+                            {{end}}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="acesso" class="form-label">Nível de Acesso</label>
+                            <select class="form-control {{if .Errors.acesso}}is-invalid{{end}}" 
+                                    id="acesso" name="acesso" required>
+                                <option value="">Selecione...</option>
+                                <option value="0" {{if eq .Administrator.Acesso 0}}selected{{end}}>
+                                    Sem Acesso
+                                </option>
+                                <option value="1" {{if eq .Administrator.Acesso 1}}selected{{end}}>
+                                    Acesso Total
+                                </option>
+                            </select>
+                            {{if .Errors.acesso}}
+                                <div class="invalid-feedback">{{.Errors.acesso}}</div>
+                            {{end}}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Cadastrar Administrador</button>
+                            <a href="/admin/list" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                {{end}}
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

@@ -2,3 +2,6 @@ go.sum
 config.json
 config.json
 /tmp
+adapter/http/docs/docs.go
+adapter/http/docs/swagger.json
+adapter/http/docs/swagger.yaml
