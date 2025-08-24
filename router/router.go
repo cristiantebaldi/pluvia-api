@@ -10,8 +10,7 @@ func SetupRoutes(adminHandler *handler.AdministradorHandler) *http.ServeMux {
     mux := http.NewServeMux()
     
     // Páginas HTML (Server-side Rendered)
-    mux.HandleFunc("/admin/create", adminHandler.ShowCreateForm)  // GET
-    mux.HandleFunc("/admin/create", adminHandler.ProcessCreate)  // POST
+    mux.HandleFunc("/admin/create", adminHandler.CreateAdministrador)
     mux.HandleFunc("/admin/list", adminHandler.ShowList)
     
     // Arquivos estáticos

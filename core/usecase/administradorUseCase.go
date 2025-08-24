@@ -1,4 +1,4 @@
-package administradorusecase
+package usecase
 
 import (
 	"fmt"
@@ -11,10 +11,29 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (usecase usecase) GetByLoginPassword(
-	loginRequest *dto.AdministradorLoginRequestBody,
-) (*domain.JwtAuthToken, error) {
-	administrador, err := usecase.repository.GetByLoginPassword(loginRequest)
+type administradorUseCase struct {
+	repository     domain.AdministradorRepository
+	authRepository domain.AuthRepository
+}
+
+func NewAdministradorUseCase(repository domain.AdministradorRepository, authRepository domain.AuthRepository) domain.AdministradorUseCase {
+	return &administradorUseCase{
+		repository:     repository,
+		authRepository: authRepository,
+	}
+}
+
+func (u *administradorUseCase) Create(administrador *dto.AdministradorRequestBody) (*domain.Administrador, error) {
+
+	return u.repository.Create(administrador)
+}
+
+func (u *administradorUseCase) Fetch() (*[]domain.Administrador, error) {
+	return u.repository.Fetch()
+}
+
+func (u *administradorUseCase) GetByLoginPassword(loginRequest *dto.AdministradorLoginRequestBody) (*domain.JwtAuthToken, error) {
+	administrador, err := u.repository.GetByLoginPassword(loginRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +47,7 @@ func (usecase usecase) GetByLoginPassword(
 		return nil, err
 	}
 
-	auth, err := usecase.authRepository.GetByAdministradorID(administrador.ID)
+	auth, err := u.authRepository.GetByAdministradorID(administrador.ID)
 	var hash string
 
 	if err != nil {
@@ -44,7 +63,7 @@ func (usecase usecase) GetByLoginPassword(
 				AdministradorID: administrador.ID,
 				Revoked:         false,
 			}
-			err := usecase.authRepository.Create(auth)
+			err := u.authRepository.Create(auth)
 
 			if err != nil {
 				return nil, err

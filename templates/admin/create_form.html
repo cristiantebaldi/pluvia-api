@@ -19,7 +19,7 @@
                         <div class="mb-3">
                             <label for="usuario" class="form-label">Usuário</label>
                             <input type="text" class="form-control {{if .Errors.usuario}}is-invalid{{end}}" 
-                                   id="usuario" name="usuario" value="{{.Administrator.Usuario}}" required>
+                                   id="usuario" name="usuario" value="{{.Administrador.Usuario}}" required>
                             {{if .Errors.usuario}}
                                 <div class="invalid-feedback">{{.Errors.usuario}}</div>
                             {{end}}
@@ -28,7 +28,7 @@
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control {{if .Errors.email}}is-invalid{{end}}" 
-                                   id="email" name="email" value="{{.Administrator.Email}}" required>
+                                   id="email" name="email" value="{{.Administrador.Email}}" required>
                             {{if .Errors.email}}
                                 <div class="invalid-feedback">{{.Errors.email}}</div>
                             {{end}}
@@ -61,7 +61,7 @@
                             <label for="numero_telefone" class="form-label">Número de Telefone</label>
                             <input type="tel" class="form-control {{if .Errors.numeroTelefone}}is-invalid{{end}}" 
                                    id="numero_telefone" name="numero_telefone" 
-                                   value="{{.Administrator.NumeroTelefone}}" required>
+                                   value="{{.Administrador.NumeroTelefone}}" required>
                             {{if .Errors.numeroTelefone}}
                                 <div class="invalid-feedback">{{.Errors.numeroTelefone}}</div>
                             {{end}}
@@ -72,10 +72,10 @@
                             <select class="form-control {{if .Errors.acesso}}is-invalid{{end}}" 
                                     id="acesso" name="acesso" required>
                                 <option value="">Selecione...</option>
-                                <option value="0" {{if eq .Administrator.Acesso 0}}selected{{end}}>
+                                <option value="0" {{if eq .Administrador.Acesso 0}}selected{{end}}>
                                     Sem Acesso
                                 </option>
-                                <option value="1" {{if eq .Administrator.Acesso 1}}selected{{end}}>
+                                <option value="1" {{if eq .Administrador.Acesso 1}}selected{{end}}>
                                     Acesso Total
                                 </option>
                             </select>
