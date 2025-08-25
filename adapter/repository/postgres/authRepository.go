@@ -17,14 +17,43 @@ func (r *authRepository) Delete(int32) error {
 	panic("unimplemented")
 }
 
-// GetByRefreshTypeToken implements domain.AuthRepository.
-func (r *authRepository) GetByRefreshTypeToken(string, string) (*domain.Auth, error) {
-	panic("unimplemented")
+func (r *authRepository) GetByRefreshTypeToken(typeToken string, refreshToken string) (*domain.Auth, error) {
+	auth := domain.Auth{}
+
+	err := r.db.QueryRow(
+		`SELECT * FROM auth where type = $1 and hash = $2;`,
+		typeToken,
+		refreshToken,
+	).Scan(
+		&auth.ID,
+		&auth.Type,
+		&auth.Hash,
+		&auth.Token,
+		&auth.AdministradorID,
+		&auth.Revoked,
+		&auth.CreatedDate,
+	)
+
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("token not created yet")
+	}
+
+	return &auth, nil
 }
 
 // Update implements domain.AuthRepository.
-func (r *authRepository) Update(int32, domain.Auth) error {
-	panic("unimplemented")
+func (r *authRepository) Update(id int32, auth domain.Auth) error {
+	_, err := r.db.Exec(
+		`UPDATE auth SET token = $1 WHERE id = $2;`,
+		auth.Token,
+		id,
+	)
+
+	if err != nil {
+		return util.GetError(err)
+	}
+
+	return nil
 }
 
 func NewAuthRepository(db DatabaseConfig) domain.AuthRepository {
@@ -39,7 +68,7 @@ func (r *authRepository) Create(auth domain.Auth) error {
 			type, 
 			hash, 
 			token, 
-			admin_id, 
+			administradores_id, 
 			revoked
 		) VALUES ($1, $2, $3, $4, $5) returning *;`,
 		auth.Type,

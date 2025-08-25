@@ -1,0 +1,33 @@
+{{define "content"}}
+<div class="row">
+    <div class="col">
+        <h2>Lista de Administradores</h2>
+        <a href="/admin/create" class="btn btn-primary mb-3">Novo Administrador</a>
+        {{if .Message}}
+            <div class="alert alert-success">{{.Message}}</div>
+        {{end}}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuário</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Administradores}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Usuario}}</td>
+                    <td>{{.Email}}</td>
+                    <td>
+                        <!-- Adicionar botões de ação (editar, excluir) aqui -->
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{end}}

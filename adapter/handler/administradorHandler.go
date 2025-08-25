@@ -73,6 +73,97 @@ func (h *AdministradorHandler) ProcessCreate(w http.ResponseWriter, r *http.Requ
 	http.Redirect(w, r, "/admin/list", http.StatusSeeOther)
 }
 
+func (h *AdministradorHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+	})
+
+	http.Redirect(w, r, "/admin/login", http.StatusSeeOther)
+}
+
+func (h *AdministradorHandler) Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		h.ProcessLogin(w, r)
+	} else {
+		h.ShowLoginForm(w, r)
+	}
+}
+
+func (h *AdministradorHandler) ShowLoginForm(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles(
+		"templates/base.html",
+		"templates/admin/login.html",
+	))
+
+	data := domain.AdministradorFormData{
+		Title:         "Login",
+		Administrador: domain.Administrador{},
+		Errors:        make(map[string]string),
+	}
+
+	if err := tmpl.ExecuteTemplate(w, "base.html", data); err != nil {
+		http.Error(w, "Erro interno do servidor", http.StatusInternalServerError)
+	}
+}
+
+func (h *AdministradorHandler) ProcessLogin(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Erro ao processar formulário", http.StatusBadRequest)
+		return
+	}
+
+	loginRequest := &dto.AdministradorLoginRequestBody{
+		Usuario: r.FormValue("usuario"),
+		Senha:   r.FormValue("senha"),
+	}
+ 
+	jwtAuthToken, err := h.UseCase.GetByLoginPassword(loginRequest)
+	if err != nil {
+		data := domain.AdministradorFormData{
+			Title:         "Login",
+			Administrador: domain.Administrador{Usuario: loginRequest.Usuario},
+			Errors:        map[string]string{"general": "Usuário ou senha inválidos"},
+		}
+
+		w.WriteHeader(http.StatusUnauthorized)
+		tmpl := template.Must(template.ParseFiles("templates/base.html", "templates/admin/login.html"))
+		tmpl.ExecuteTemplate(w, "base.html", data)
+		return
+	}
+
+	// Configurar cookies de autenticação
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    jwtAuthToken.Token,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true, // Em produção, use true
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    jwtAuthToken.Refresh,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   true, // Em produção, use true
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	http.Redirect(w, r, "/admin/list", http.StatusSeeOther)
+}
+
 func (h *AdministradorHandler) ShowList(w http.ResponseWriter, r *http.Request) {
 	administradores, err := h.UseCase.Fetch()
 	if err != nil {

@@ -42,7 +42,9 @@ func (u *administradorUseCase) GetByLoginPassword(loginRequest *dto.Administrado
 	jwtToken := domain.NewJwtToken(*administrador, fiveMinutes)
 
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), jwtToken)
+
 	tokenString, err := token.SignedString([]byte(viper.GetString(`hash.bcrypt`)))
+
 	if err != nil {
 		return nil, err
 	}
@@ -51,9 +53,11 @@ func (u *administradorUseCase) GetByLoginPassword(loginRequest *dto.Administrado
 	var hash string
 
 	if err != nil {
-		if err.Error() == "Token not created yet" {
+		if err.Error() == "token not created yet" {
 			senha := []byte(viper.GetString(`hash.bcrypt`))
 			hashedPassword, _ := bcrypt.GenerateFromPassword(senha, bcrypt.DefaultCost)
+			
+			
 			hash = string(hashedPassword)
 
 			auth := domain.Auth{

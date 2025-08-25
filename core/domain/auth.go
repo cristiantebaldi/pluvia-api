@@ -21,3 +21,7 @@ type AuthRepository interface {
 	Delete(int32) error
 	Update(int32, Auth) error
 }
+
+type AuthUseCase interface {
+	RefreshToken(string) (*JwtAuthToken, error)
+}

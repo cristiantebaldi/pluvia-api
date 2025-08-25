@@ -14,7 +14,7 @@ CREATE TABLE usuarios (
 
 CREATE TABLE administradores (
     id SERIAL PRIMARY KEY,
-    usuario VARCHAR(100) NOT NULL,
+    usuario VARCHAR(100) NOT NULL UNIQUE,
     senha VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     numero_telefone VARCHAR(25) NOT NULL UNIQUE,

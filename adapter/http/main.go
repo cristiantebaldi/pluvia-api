@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/pluvia/pluvia-api/adapter/http/middleware"
+	"github.com/pluvia/pluvia-api/core/usecase"
 	"github.com/pluvia/pluvia-api/adapter/handler"
 	"github.com/pluvia/pluvia-api/adapter/repository/postgres"
 	"github.com/pluvia/pluvia-api/di"
@@ -30,18 +32,21 @@ func main() {
 
 	// Dependency Injection
 	administradorUseCase := di.ConfigAdministradorDI(conn)
+	authRepository := postgres.NewAuthRepository(conn)
+	authUseCase := usecase.NewAuthUseCase(authRepository)
 
 	// Criando handlers
 	administradorHandler := handler.NewAdministradorHandler(administradorUseCase, validate)
 
 	// Setup do router
-	mux := router.SetupRoutes(administradorHandler)
+	authMiddleware := middleware.NewAuthMiddleware(authUseCase)
+	mux := router.SetupRoutes(administradorHandler, authMiddleware)
 
 	// Servidor
 	port := viper.GetString("server.http.port")
 
 	log.Printf("🚀 Servidor Pluvia iniciando...")
-	log.Printf("🌐 Interface Web: http://localhost:%s/admin/create", port)
+	log.Printf("🌐 Interface Web: http://localhost:%s/admin/login", port)
 
 	server := &http.Server{
 		Addr:    ":" + port,
